@@ -5,8 +5,22 @@ import Navbar from '~/components/Navbar'
 const upload = () => {
   const [isProcessing, setisProcessing] = useState(false);
   const [statusText, setstatusText] = useState('')
+  const [file, setfile] = useState<File | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {}
+  const handleFileSelect = (file: File | null) => {
+    setfile(file);
+  }
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget.closest('form');
+    if (!form) return;
+    const formData = new FormData(form);
+
+    const companyName = formData.get('company-name');
+    const jobTitle = formData.get('job-title');
+    const jobDescription = formData.get('job-description');
+  }
 
 
   return (
@@ -42,7 +56,7 @@ const upload = () => {
             </div>
             <div className="form-div">
               <label htmlFor="uploader">Upload Resume</label>
-              <FileUploader />
+              <FileUploader onFileSelect={handleFileSelect}/>
             </div>
             <button className='primary-button' type='submit'>
               Analyze Resume
